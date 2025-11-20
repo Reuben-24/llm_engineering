@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+from playwright.async_api import async_playwright
 
 
 # Standard headers to fetch a website
@@ -35,3 +36,16 @@ def fetch_website_links(url):
     soup = BeautifulSoup(response.content, "html.parser")
     links = [link.get("href") for link in soup.find_all("a")]
     return [link for link in links if link]
+    
+
+async def fetch_website_links_playwright(url):
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        page = await browser.new_page()
+        await page.goto(url)
+        await page.wait_for_load_state('networkidle');
+        html = await page.content()
+        await browser.close()
+        soup = BeautifulSoup(html, "html.parser")
+        links = [a.get("href") for a in soup.find_all("a")]
+        return [link for link in links if link]

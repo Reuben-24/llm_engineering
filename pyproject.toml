@@ -50,4 +50,5 @@ dependencies = [
     "langchain-experimental>=0.0.42",
     "torchvision==0.17.2",
     "torchaudio==2.2.2",
+    "playwright>=1.56.0",
 ]
